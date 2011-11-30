@@ -14,19 +14,29 @@
 */
 
 class S_Crowdflower_Controller extends Controller {
-	private $crowdflower_apikey;
-	private $crowdflower_jobid;
+	//private $crowdflower_apikey;
+	//private $crowdflower_jobid;
 	
-	public function __construct() {
-		$settings = ORM::factory("crowdflower_settings")->find(1);
-		if ($settings->loaded) {
-			$this->crowdflower_apikey = $settings->crowdflower_apikey;
-			$this->crowdflower_jobid = $settings->crowdflower_jobid;
-		}
+	public function __construct() 
+	{
+		parent::__construct();
+		
+		// Load cache
+		$this->cache = new Cache;
+
 	}
 
 	public function index()
 	{
+		
+		//grab the job variables
+		$settings = ORM::factory("crowdflower")->find(1);
+		if ($settings->loaded == true) {
+			$crowdflower_apikey = $settings->crowdflower_apikey;
+			$crowdflower_jobid = $settings->crowdflower_jobid;
+
+		}
+
 		$page = 1;
 		$have_results = TRUE;
 		while($have_results == TRUE AND $page <=2)
